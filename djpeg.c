@@ -1,5 +1,5 @@
-// compilar con cc exlibjpeg.c -ljpeg -o exlibjpeg
-// ejecutar ./exlibjpeg filename.jpg
+// compilar con cc djpeg.c -ljpeg -o djpeg
+// ejecutar ./djpeg filename.jpg
 
 #include <fcntl.h>
 #include <stdio.h>
@@ -102,13 +102,51 @@ int main(int argc, char const *argv[]) {
 
   /* asegurarse de que todo ha ido bien */
 
-  fd = open("output.ppm", O_CREAT | O_WRONLY, 0666);
+  fd = open("output.bpm", O_CREAT | O_WRONLY, 0666);
   char buf[1024];
   rc = sprintf(buf, "P6 %d %d 255\n", width, height);
   write(fd, buf, rc);
   write(fd, bmp_buffer, bmp_size);
+  syslog(LOG_INFO, "End of decompression");
   close(fd);
   free(bmp_buffer);
-  syslog(LOG_INFO, "End of decompression");
+  readPPM(width, height);
   return EXIT_SUCCESS;
+}
+
+int readPPM(int width, int height) {
+  char *input_filename = "output.bpm";
+  FILE *fd;
+  int i,j;
+  int image[1200][3]; // 1200 pixeles, 3 valores rgb
+  
+  fd = fopen(input_filename, "rb");
+  if(fd == (FILE *)0){
+    printf("File opening error.");
+    exit(0);
+  }
+  int byte;
+  struct pixel {int r, g, b} avg;
+  int count = 0;
+  for(i=0; i<54;i++) {
+    byte = getc(fd);
+  }// Eliminar header // cambiar por fseek?? por si los headers son diferentes
+  for(i=0; i<height; i++){
+    for(j=0; j<width; j++) {
+
+    image[j][2] = getc(fd);
+    image[j][1] = getc(fd);
+    image[j][0] = getc(fd);
+    avg.r += image[j][2];
+    avg.g += image[j][1];
+    avg.b += image[j][0];
+    count++;
+    //printf("Row %d, pixel %d : [%d, %d, %d]\n",i+1, j+1,image[j][2],image[j][1],image[j][0]);
+    }
+  }
+  avg.g = avg.g/count;
+  avg.b = avg.b/count;
+  avg.r = avg.r/count;
+  printf("Average color: [%d, %d, %d]\n", avg.r, avg.g, avg.b);
+  fclose(fd);
 }
