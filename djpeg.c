@@ -102,7 +102,7 @@ int main(int argc, char const *argv[]) {
 
   /* asegurarse de que todo ha ido bien */
 
-  fd = open("output.bpm", O_CREAT | O_WRONLY, 0666);
+  fd = open("output.bmp", O_CREAT | O_WRONLY, 0666);
   char buf[1024];
   rc = sprintf(buf, "P6 %d %d 255\n", width, height);
   write(fd, buf, rc);
@@ -119,7 +119,7 @@ int readPPM(int width, int height) {
   FILE *fd;
   int i,j;
   int image[1200][3]; // 1200 pixeles, 3 valores rgb
-  
+
   fd = fopen(input_filename, "rb");
   if(fd == (FILE *)0){
     printf("File opening error.");
