@@ -1,4 +1,4 @@
-from PIL import Image
+from PIL import Image, ImageDraw
 import sys, os
 from os import listdir
 from os.path import isfile, join
@@ -37,10 +37,17 @@ def getAverage(dir):
 		index+=1
 		print(rgb_list)
 	print("Done reading")
+	return rgb_list
+
+def writeImg(list):
+	img = Image.new("RGB", (500,500))
+	draw = ImageDraw.Draw(img)
+	draw.rectangle((0,0,100,100),fill=(155,150,27))
+	img.show()
+	img.save("test.jpg")
 def main():
-	for arg in sys.argv:
-		print(arg)
-		if(arg!='main.py'):
-			getAverage(arg)
+	list = getAverage(sys.argv[1])
+	writeImg(list)
+
 
 main()
