@@ -15,3 +15,4 @@ Método de uso
 Tarda que flipas, pero acaba estando guay. Por ahora el tamaño de la foto será tanta altura como fotogramas 
 haya y anchura de ratio 9:16
   
+Hay un demo con la pelicula esta eternal sunshine de no se que está chula vedla. Por motivos obvios no la he subido aquí, pero sí los fotogramas pa que se note ahí las cosas.
